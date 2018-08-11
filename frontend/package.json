@@ -1,0 +1,56 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "GoodRoomie Frontend _React_",
+  "main": "bundle.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slashinc/goodRoomie.git"
+  },
+  "keywords": [
+    "react",
+    "expenses",
+    "room",
+    "maintainence"
+  ],
+  "author": "Sri Harsha Sankarasetty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/slashinc/goodRoomie/issues"
+  },
+  "homepage": "https://github.com/slashinc/goodRoomie#readme",
+  "dependencies": {
+    "css-loader": "^1.0.0",
+    "express": "^4.16.3",
+    "history": "^4.7.2",
+    "node-sass": "^4.9.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "rmwc": "^1.8.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.22.1",
+    "url-loader": "^1.0.1",
+    "uuid": "^3.3.2",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "glob": "^7.1.2",
+    "img-loader": "^3.0.0"
+  }
+}
