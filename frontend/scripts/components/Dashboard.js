@@ -14,23 +14,49 @@ import {Snackbar} from 'rmwc/Snackbar';
 import {Fab, DialogBody} from 'rmwc';
 import Modal from './common/Modal';
 import {Checkbox} from 'rmwc/Checkbox';
+import {
+    Chip,
+    ChipIcon,
+    ChipText,
+    ChipCheckmark,
+    ChipSet,
+    SimpleChip
+  } from 'rmwc/Chip';
+import uuid from 'uuid';
 
 const CustomCard = (props) => (
-    <aside
+    <div
         style={{
         height: `calc(${props.height})`
     }}
         className="special">
-        <Typography use="headline5">{props.heading}</Typography>
-        <ListDivider/>
+        <Typography style={{paddingBottom:"5px"}} use="headline5">{props.heading}</Typography>
         <div
             className="overflow"
+            id= {props.id}
             style={{
             height: `calc(${props.height} - 30px)`
         }}>
-            <p>{props.text}</p>
+            {   
+                props.messages.map((message, key) => {
+                        var name = "";
+                        message.by == "me" ? name = "left-bubble" : name = "right-bubble";
+                        return(
+                            <Grid key={key}>
+                                <GridCell span="12">
+                                    <div className={name}>
+                                        <Typography use="caption">{message.by}</Typography>
+                                        <ListDivider/>
+                                        <Typography use="subtitle1">{message.message}</Typography>    
+                                    </div>
+                                </GridCell>
+                            </Grid>
+                        )
+                    
+                })
+            }
         </div>
-    </aside>
+    </div>
 );
 
 const AddSpace = (props) => (
@@ -59,81 +85,174 @@ const Addbutton = props => (
         Add Item</Button>
 );
 
-const Modalbody = props => (
-    <table>
-        <thead>
-            <tr><th>Item</th></tr>
-            <tr><th>Price</th></tr>
-            <tr><th>Split To</th></tr>
-        </thead>
-        <tbody>
-            <tr>
-                {props
-                    .items
-                    .map((item, key) => {
-                        return (
-                            <div key={key}>
-                                <td>{item.name}</td>
-                                <td>{item.price}</td>
-                                <td>{item.members}</td>
-                            </div>
-                        )
-                    })
+class Modalbody extends Component {
+    constructor(props) {
+      super(props)
+    
+      this.state = {
+            items: {
+                name: '',
+                price: '',
+                members: []
+            },
+      }
+      this.handleInputChange = this.handleInputChange.bind(this);
+      this.chipHandler = this.chipHandler.bind(this);
+      this.resetForm = this.resetForm.bind(this);
+    }
+    chipHandler(e) {
+        const scope = e.target.id;
+        const members = this.state.items.members;
+        if (members.includes(scope)) {
+            members.splice(members.indexOf(scope), 1 ); 
+        }
+        else{
+            members.push(scope);
+        }
+        this.setState({
+            ...this.state,
+            items: {
+                ...this.state.items,
+                members
+            }
+        })
+    }
+    resetForm(){
+        console.log("resetting form");
+        this.setState({
+            items: {
+                name: '',
+                price: '',
+                members: new Array()
+            }
+        }, () => {console.log(this.state);})
+        
+    }
+    handleInputChange(e) {
+        e.preventDefault();
+        switch (e.target.id) {
+            case "item":
+                this.setState({
+                    ...this.state,
+                    items: {
+                        ...this.state.items,
+                        name: e.target.value
+                    }
+                })
+                break;
+            case "price":
+                this.setState({
+                    ...this.state,
+                    items: {
+                        ...this.state.items,
+                        price: e.target.value
+                    }
+                })
+                break;
+            default:
+                break;
+        }
+    }
+    render(){
+        return(
+            <div>
+                {
+                    this.props.items.length > 0 ? (
+                        <table width="100%">
+                            <thead>
+                                <tr><th>Item</th><th>Price</th><th>Split To</th></tr>
+                            </thead>
+                            <tbody>
+                                    {this.props
+                                        .items
+                                        .map((item, key) => {
+                                            return (
+                                                <tr style={{textAlign: "center"}} key={key}>
+                                                    <td>{item.name}</td>
+                                                    <td>{item.price}</td>
+                                                    <td>{item.members}</td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                            </tbody>
+                        </table>
+                    ) : null
                 }
-            </tr>
-            <tr>
-                <td><TextField ref="item" outlined label="Item Name"/></td>
-                <td><TextField ref="price" outlined label="Price of the Item"/></td>
-                <td>
-                    <Select ref="selected" label="Manual" defaultValue="">
-                        <option value="all">
-                            <Checkbox onChange={props.checkAll}>
-                                All
-                            </Checkbox>
-                        </option>
-                        {props
-                            .members
-                            .map((member, key) => (
-                                <option value="member">
-                                    <Checkbox checked={e => {
-                                        if (isAllChecked) return true;
-                                        else return !e.target.checked;
-                                    }}>{member}</Checkbox>
-                                </option>
-                            ))
-                        }
-                    </Select>
-                    <Addbutton />
-                </td>
-            </tr>
-        </tbody>
-    </table>
-);
-
-const Closeicon = props => (
-    <Button onClick={props.handler}>Send&nbsp;<ButtonIcon use="send"/></Button>
-);
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    console.log("Form Submitting")
+                    const items = JSON.parse(JSON.stringify(this.state.items));
+                    this.props.addItem({...items, id: uuid()});
+                    this.resetForm();
+                }}>
+                <Grid>
+                    <GridCell span="3">
+                        <TextField ref="name" required onChange={this.handleInputChange} id="item" outlined label="Item Name" value={this.state.items.name}/>
+                    </GridCell>
+                    <GridCell span="3">
+                        <TextField ref="price" type="number" step=".01" required onChange={this.handleInputChange} id="price" outlined label="Price of the Item" value={this.state.items.price}/>                        
+                    </GridCell>
+                    
+                    <GridCell span="6">
+                        <ChipSet filter className="overflow" style={{height: "5rem"}}>
+                            {
+                                this.props.members.map((item, key) => {
+                                    return(
+                                        <div key={key} >
+                                            <Chip
+                                                onClick={this.chipHandler}
+                                                selected={this.state.items.members.includes(item)}
+                                                id={item}
+                                                ref={item}
+                                            >
+                                                <ChipIcon id={item} use="face" leading />
+                                                <ChipCheckmark />
+                                                <ChipText id={item}>{item}</ChipText>
+                                            </Chip>
+                                        </div>
+                                    );
+                                })
+                            }
+                        </ChipSet>
+                    </GridCell>
+                </Grid>    
+                <Button type="submit"><ButtonIcon use="add"/>Add Item</Button>
+                </form>
+            </div>
+        );
+    }
+};
 
 const Widgets = props => {
     switch (props.type) {
         case "message":
             return (
-                <div style={{
-                    display: "block"
-                }}>
+                <form 
+                    style={{
+                        display: "block"
+                    }}
+                    onSubmit={e => {
+                        e.preventDefault();
+                        props.handler(e);
+                        e.target.message.value="";
+                    }}
+                >
                     <GridInner className="bottom-align">
                         <GridCell span="9">
-                            <TextField fullwidth rows="1" inputRef="text" label="Message goes here..."/>
+                            <TextField required name="message" fullwidth rows="1" inputRef="text" label="Message goes here..."/>
                         </GridCell>
-                        <GridCell className="bottom-align" span="1"><Closeicon handler={props.handler}/></GridCell>
+                        <GridCell className="bottom-align" span="1">
+                            <Button type="submit">Send&nbsp;<ButtonIcon use="send"/></Button>
+                        </GridCell>
                     </GridInner>
-                </div>
+                </form>
             );
             break;
         case "expense":
             return (<Select
                 onChange=
-                {e => { console.log(e.target); props.dialogHandler(true); }}
+                {e => { props.dialogHandler(true); }}
                 className="bottom-align"
                 label="Expense Type"
                 outlined
@@ -154,7 +273,8 @@ export default class Dashboard extends Component {
             snackbarIsOpen: false,
             isDialogOpen: false,
             expenseItems: [],
-            checkAll: false
+            checkAll: false,
+            messages: []
         }
         this.menuHandler = this
             .menuHandler
@@ -182,14 +302,21 @@ export default class Dashboard extends Component {
         })
     }
     widgetHandler(type) {
-        console.log(type)
         this.setState({openMenu: true, renderInputs: type});
     }
-    snackHandler(type) {
+    snackHandler(e) {
+        console.log(e.target.message.value)
         this.setState({
             ...this.state,
-            snackbarIsOpen: !this.state.snackbarIsOpen
+            snackbarIsOpen: !this.state.snackbarIsOpen,
+            messages: this.state.messages.concat({
+                message: e.target.message.value,
+                by: "me"
+            })
         })
+        $('#chatRoom').stop().animate({
+            scrollTop: $('#chatRoom')[0].scrollHeight
+            }, 800);
     }
     dialogHandler(type) {
         this.setState({
@@ -197,24 +324,26 @@ export default class Dashboard extends Component {
             isDialogOpen: type
         })
     }
-    checkAll(type) {
+    checkAll() {
         this.setState({
             ...this.state,
-            checkAll: type
+            checkAll: !this.state.checkAll
         })
     }
     addItem(item) {
-        this.setState({
-            ...this.state,
-            expenseItems: this.state.expenseItems.push(item)
-        })
+        if (this.state.expenseItems.id != item.id) {
+            this.setState({
+                ...this.state,
+                expenseItems: this.state.expenseItems.concat({...item, members: item.members.length==0?"All":item.members})
+            })
+        }
     }
     render() {
         return (
             <div>
                 <Grid>
                     <GridCell span="8">
-                        <CustomCard text={this.text} heading="Feed" height="60vh + 12px"/>
+                        <CustomCard id="chatRoom" messages={this.state.messages} heading="Feed" height="60vh + 12px"/>
                         <GridInner
                             style={{
                             marginTop: "4vh"
@@ -234,8 +363,8 @@ export default class Dashboard extends Component {
                     </GridCell>
                     <GridCell span="4">
                         <GridInner>
-                            <GridCell span="12"><CustomCard heading="On Duty" text={this.text} height="35.5vh"/></GridCell>
-                            <GridCell span="12"><CustomCard heading="Food Schedule" text={this.text} height="35.5vh"/></GridCell>
+                            <GridCell span="12"><CustomCard heading="On Duty" messages={[]} height="35.5vh"/></GridCell>
+                            <GridCell span="12"><CustomCard heading="Food Schedule" messages={[]} height="35.5vh"/></GridCell>
                         </GridInner>
                     </GridCell>
                 </Grid>
@@ -245,7 +374,7 @@ export default class Dashboard extends Component {
                     message="Message Sent"
                     actionText="Dismiss"
                     actionHandler={() => {}}/>
-                <Modal body={<Modalbody addItem={this.addItem} items={this.state.expenseItems} checkAll={this.checkAll} members={[]} />} isDialogOpen={this.state.isDialogOpen} openDialog={this.dialogHandler}/>
+                <Modal body={<Modalbody addItem={this.addItem} items={this.state.expenseItems} checkAll={this.checkAll} isAllChecked={this.state.checkAll} members={['Me','You',"Someone","Nobody","Tata","Bye Bye"]} />} isDialogOpen={this.state.isDialogOpen} openDialog={this.dialogHandler}/>
             </div>
         )
     }

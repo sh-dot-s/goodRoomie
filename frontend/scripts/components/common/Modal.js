@@ -29,13 +29,12 @@ export default class Modal extends Component {
                         <DialogHeader>
                             <DialogHeaderTitle>Add Expense</DialogHeaderTitle>
                         </DialogHeader>
-                        <DialogBody>{this.props.body}</DialogBody>
+                        <DialogBody scrollable={true}>{this.props.body}</DialogBody>
                         <DialogFooter>
                             <DialogFooterButton cancel>Cancel</DialogFooterButton>
                             <DialogFooterButton accept>Sweet!</DialogFooterButton>
                         </DialogFooter>
                     </DialogSurface>
-                    <DialogBackdrop/>
                 </Dialog>
             </div>
         )

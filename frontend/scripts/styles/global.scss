@@ -1,5 +1,5 @@
 @import "material-components-web/material-components-web";
-@import url('https://fonts.googleapis.com/css?family=Quicksand|Cabin|Libre+Franklin|Oxygen|Questrial|Titillium+Web|Work+Sans');
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Montserrat|Pacifico|Preahvihear|Quicksand|Cabin|Libre+Franklin|Oxygen|Questrial|Titillium+Web|Work+Sans');
 .responsive {
     height: auto;
     width: auto;
@@ -10,7 +10,7 @@
     --mdc-theme-primary: #000000;
     --mdc-theme-secondary: #42A5F5;
     --mdc-theme-on-secondary: black;
-    font-family: 'Oxygen', sans-serif !important;
+    font-family: 'Indie Flower', sans-serif !important;
 }
 
 .fill {
@@ -27,7 +27,11 @@ body {
     height: 100%;
 }
 
-aside.special {
+.mdc-chip.mdc-chip--selected, .mdc-chip.mdc-chip--selected:hover{
+    color: #6200ee;
+}
+
+div.special {
     padding: 5px;
     padding-left: 8px !important;
     border-left: 5px solid;
@@ -35,6 +39,80 @@ aside.special {
     background: #E0E0E0;
     color: #212124;
     border-radius: 8px;
+    .mdc-layout-grid {
+        padding: 10px;
+    }
+    .mdc-typography--headline5{
+        font-family: 'Pacifico', sans-serif !important;
+    }
+    .right-bubble{
+            position: relative;
+            background: rgb(255, 255, 255);
+            text-align: right;
+            padding: 5px 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            float: right;
+            max-width: 45%;
+            display: block;
+            right: 20px;
+            word-break: break-all;
+          
+          ::before {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            top: -1px;
+            right: -10px;
+            border: 10px solid transparent;
+            border-top: 10px solid #ccc;
+          }
+          
+          ::after {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            top: 0px;
+            right: -8px;
+            border: 10px solid transparent;
+            border-top: 10px solid rgb(255, 255, 255);
+            clear: both;
+          }
+    }
+    .left-bubble{
+            position: relative;
+            background: rgb(255, 255, 255);
+            text-align: left;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            float: left;
+            left: 10px;
+            max-width: 45%;
+            display: block;
+            word-break: break-all;
+          
+          ::before {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            top: -1px;
+            left: -10px;
+            border: 10px solid transparent;
+            border-top: 10px solid #ccc;
+          }
+          
+          ::after {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            top: 0px;
+            left: -8px;
+            border: 10px solid transparent;
+            border-top: 10px solid rgb(255, 255, 255);
+            clear: both;
+          }
+    }
 }
 
 .overflow {
