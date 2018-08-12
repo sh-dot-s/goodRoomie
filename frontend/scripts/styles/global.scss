@@ -13,6 +13,10 @@
     font-family: 'Indie Flower', sans-serif !important;
 }
 
+.mdc-drawer--temporary .mdc-list-item, .mdc-drawer--temporary {
+    font-family: 'Cabin', "Roboto" !important;
+}
+
 .fill {
     max-width: 100%;
     max-height: 100%;
@@ -21,6 +25,10 @@
 body {
     margin: 0;
     height: 100vh;
+    background-image: url("/nice.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #root {
@@ -35,8 +43,8 @@ div.special {
     padding: 5px;
     padding-left: 8px !important;
     border-left: 5px solid;
-    border-color: #E91E63;
-    background: #E0E0E0;
+    border-color: #CDDC39;
+    background: #EEEEEE;
     color: #212124;
     border-radius: 8px;
     .mdc-layout-grid {
@@ -75,7 +83,7 @@ div.special {
             top: 0px;
             right: -8px;
             border: 10px solid transparent;
-            border-top: 10px solid rgb(255, 255, 255);
+            border-top: 10px solid rgb(148, 148, 148);
             clear: both;
           }
     }

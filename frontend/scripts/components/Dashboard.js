@@ -23,6 +23,8 @@ import {
     SimpleChip
   } from 'rmwc/Chip';
 import uuid from 'uuid';
+import moment from 'moment';
+import { Switch } from 'rmwc/Switch';
 
 const CustomCard = (props) => (
     <div
@@ -45,7 +47,7 @@ const CustomCard = (props) => (
                             <Grid key={key}>
                                 <GridCell span="12">
                                     <div className={name}>
-                                        <Typography use="caption">{message.by}</Typography>
+                                        <Typography use="caption">{message.by}&nbsp;|&nbsp;{message.time}</Typography>
                                         <ListDivider/>
                                         <Typography use="subtitle1">{message.message}</Typography>    
                                     </div>
@@ -158,25 +160,29 @@ class Modalbody extends Component {
             <div>
                 {
                     this.props.items.length > 0 ? (
-                        <table width="100%">
-                            <thead>
-                                <tr><th>Item</th><th>Price</th><th>Split To</th></tr>
-                            </thead>
-                            <tbody>
-                                    {this.props
-                                        .items
-                                        .map((item, key) => {
-                                            return (
-                                                <tr style={{textAlign: "center"}} key={key}>
-                                                    <td>{item.name}</td>
-                                                    <td>{item.price}</td>
-                                                    <td>{item.members}</td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                            </tbody>
-                        </table>
+                        <Grid>
+                            <GridCell span="12">
+                                <table width="100%">
+                                    <thead>
+                                        <tr><th>Item</th><th>Price</th><th>Split To</th></tr>
+                                    </thead>
+                                    <tbody>
+                                            {this.props
+                                                .items
+                                                .map((item, key) => {
+                                                    return (
+                                                        <tr style={{textAlign: "center"}} key={key}>
+                                                            <td>{item.name}</td>
+                                                            <td>{item.price}</td>
+                                                            <td>{item.members}</td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                    </tbody>
+                                </table>
+                            </GridCell>
+                        </Grid>
                     ) : null
                 }
                 <form onSubmit={(e) => {
@@ -243,7 +249,7 @@ const Widgets = props => {
                             <TextField required name="message" fullwidth rows="1" inputRef="text" label="Message goes here..."/>
                         </GridCell>
                         <GridCell className="bottom-align" span="1">
-                            <Button type="submit">Send&nbsp;<ButtonIcon use="send"/></Button>
+                            <Button outlined type="submit">Send&nbsp;<ButtonIcon use="send"/></Button>
                         </GridCell>
                     </GridInner>
                 </form>
@@ -311,7 +317,8 @@ export default class Dashboard extends Component {
             snackbarIsOpen: !this.state.snackbarIsOpen,
             messages: this.state.messages.concat({
                 message: e.target.message.value,
-                by: "me"
+                by: "me",
+                time: moment().format("MMMM Do YYYY, h:mm:ss a")
             })
         })
         $('#chatRoom').stop().animate({
@@ -343,7 +350,7 @@ export default class Dashboard extends Component {
             <div>
                 <Grid>
                     <GridCell span="8">
-                        <CustomCard id="chatRoom" messages={this.state.messages} heading="Feed" height="60vh + 12px"/>
+                        <CustomCard id="chatRoom" messages={this.state.messages} heading="Feed" height="60vh + 12px" />
                         <GridInner
                             style={{
                             marginTop: "4vh"
@@ -374,7 +381,7 @@ export default class Dashboard extends Component {
                     message="Message Sent"
                     actionText="Dismiss"
                     actionHandler={() => {}}/>
-                <Modal body={<Modalbody addItem={this.addItem} items={this.state.expenseItems} checkAll={this.checkAll} isAllChecked={this.state.checkAll} members={['Me','You',"Someone","Nobody","Tata","Bye Bye"]} />} isDialogOpen={this.state.isDialogOpen} openDialog={this.dialogHandler}/>
+                <Modal body={<Modalbody addItem={this.addItem} items={this.state.expenseItems} checkAll={this.checkAll} isAllChecked={this.state.checkAll} members={["SomeDash",'Me','You',"Someone","Nobody","Tata","Bye Bye"]} />} isDialogOpen={this.state.isDialogOpen} openDialog={this.dialogHandler}/>
             </div>
         )
     }
