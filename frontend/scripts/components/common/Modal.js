@@ -24,7 +24,7 @@ export default class Modal extends Component {
             <div>
                 <Dialog
                     open={this.props.isDialogOpen}
-                    onClose={()=>{this.props.openDialog(false)}}>
+                    onClose={(e)=>{this.props.openDialog(false)}}>
                     <DialogSurface>
                         <DialogHeader>
                             <DialogHeaderTitle>Add Expense</DialogHeaderTitle>

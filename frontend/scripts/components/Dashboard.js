@@ -26,6 +26,8 @@ import uuid from 'uuid';
 import moment from 'moment';
 import { Switch } from 'rmwc/Switch';
 import ScheduleSub from  './_Schedule';
+import FeedSub from './_Feed';
+import DutySub from './_Duty';
 
 const CustomCard = (props) => (
     <div
@@ -38,30 +40,13 @@ const CustomCard = (props) => (
         className="special">
         <Typography style={{paddingBottom:"5px"}} use="headline5">{props.heading}</Typography>
         <div
-            className="overflow"
+            className={props.isOverflowAllowed? "overflow": ""}
             id= {props.id}
             style={{
             height: `calc(${props.height} - 30px)`
         }}>
             {   
-                props.children ? (props.children) : (
-                    props.messages.map((message, key) => {
-                        var name = "";
-                        message.by == "me" ? name = "left-bubble" : name = "right-bubble";
-                        return(
-                            <Grid key={key}>
-                                <GridCell span="12">
-                                    <div className={name}>
-                                        <Typography use="caption">{message.by}&nbsp;|&nbsp;{message.time}</Typography>
-                                        <ListDivider/>
-                                        <Typography use="subtitle1">{message.message}</Typography>    
-                                    </div>
-                                </GridCell>
-                            </Grid>
-                        )
-                    
-                })
-                )
+                props.children
             }
         </div>
     </div>
@@ -104,6 +89,7 @@ class Modalbody extends Component {
                 members: []
             },
       }
+      console.log(this.props.option)
       this.handleInputChange = this.handleInputChange.bind(this);
       this.chipHandler = this.chipHandler.bind(this);
       this.resetForm = this.resetForm.bind(this);
@@ -121,7 +107,7 @@ class Modalbody extends Component {
             ...this.state,
             items: {
                 ...this.state.items,
-                members
+                members: this.props.option == "Dutch Split" ? members : ["Room"]
             }
         })
     }
@@ -207,26 +193,30 @@ class Modalbody extends Component {
                     </GridCell>
                     
                     <GridCell span="6">
-                        <ChipSet filter className="overflow" style={{height: "5rem"}}>
-                            {
-                                this.props.members.map((item, key) => {
-                                    return(
-                                        <div key={key} >
-                                            <Chip
-                                                onClick={this.chipHandler}
-                                                selected={this.state.items.members.includes(item)}
-                                                id={item}
-                                                ref={item}
-                                            >
-                                                <ChipIcon id={item} use="face" leading />
-                                                <ChipCheckmark />
-                                                <ChipText id={item}>{item}</ChipText>
-                                            </Chip>
-                                        </div>
-                                    );
-                                })
-                            }
-                        </ChipSet>
+                        {
+                            this.props.option == "Dutch Split" ? ( 
+                            <ChipSet filter className="overflow" style={{height: "5rem"}}>
+                                {
+                                        this.props.members.map((item, key) => {
+                                            return(
+                                                <div key={key} >
+                                                    <Chip
+                                                        onClick={this.chipHandler}
+                                                        selected={this.state.items.members.includes(item)}
+                                                        id={item}
+                                                        ref={item}
+                                                    >
+                                                        <ChipIcon id={item} use="face" leading />
+                                                        <ChipCheckmark />
+                                                        <ChipText id={item}>{item}</ChipText>
+                                                    </Chip>
+                                                </div>
+                                            );
+                                        })
+                                }
+                            </ChipSet>
+                            ) : null
+                        }
                     </GridCell>
                 </Grid>    
                 <Button type="submit"><ButtonIcon use="add"/>Add Item</Button>
@@ -255,7 +245,7 @@ const Widgets = props => {
                             <TextField required name="message" fullwidth rows="1" inputRef="text" label="Message goes here..."/>
                         </GridCell>
                         <GridCell className="bottom-align" span="1">
-                            <Button outlined type="submit">Send&nbsp;<ButtonIcon use="send"/></Button>
+                            <Button type="submit">Send&nbsp;<ButtonIcon use="send"/></Button>
                         </GridCell>
                     </GridInner>
                 </form>
@@ -263,13 +253,36 @@ const Widgets = props => {
             break;
         case "expense":
             return (<Select
-                onChange=
-                {e => { props.dialogHandler(true); }}
+                onChangeCapture=
+                {e => { props.dialogHandler(true,e); }}
                 className="bottom-align"
                 label="Expense Type"
                 outlined
                 placeholder="Choose"
                 options={['Dutch Split', 'Room Expense']}/>);
+            break;
+        case "post":
+            return (
+                <form 
+                    style={{
+                        display: "block"
+                    }}
+                    onSubmit={e => {
+                        e.preventDefault();
+                        props.handler(e);
+                        e.target.post.value="";
+                    }}
+                >
+                    <GridInner className="bottom-align">
+                        <GridCell span="9">
+                            <TextField required name="post" fullwidth rows="1" inputRef="text" label="Type Something here..."/>
+                        </GridCell>
+                        <GridCell className="bottom-align" span="1">
+                            <Button type="submit">Post&nbsp;<ButtonIcon use="play_circle_filled"/></Button>
+                        </GridCell>
+                    </GridInner>
+                </form>
+            );
             break;
         default:
             return null;
@@ -285,12 +298,24 @@ export default class Dashboard extends Component {
             snackbarIsOpen: false,
             isDialogOpen: false,
             expenseItems: [],
-            checkAll: false,
+            selectedOption: undefined,
             messages: [],
             schedule: [
                 ["Breakfast", "Dosa, Tomato Chutney, Aloo Fry, Pudina Chutney"],
                 ["Lunch", "Veg Biryani,Kurma"],
                 ["Dinner", "Chapathi, Gobi Curry"]
+            ],
+            duty: [
+                ["Garbage Takeout", "Mr.Balsy Bullow"],
+                ["Groceries", "Mr.Galdrow Wilson"],
+            ],
+            posts:[
+                {
+                    by: "Sri Harsha",
+                    replyCount: 0,
+                    body: "This is a sample post body",
+                    time: moment().format("MMMM Do YYYY, h:mm:ss a"),
+                }
             ]
         }
         this.menuHandler = this
@@ -322,25 +347,49 @@ export default class Dashboard extends Component {
         this.setState({openMenu: true, renderInputs: type});
     }
     snackHandler(e) {
-        console.log(e.target.message.value)
-        this.setState({
-            ...this.state,
-            snackbarIsOpen: !this.state.snackbarIsOpen,
-            messages: this.state.messages.concat({
-                message: e.target.message.value,
-                by: "me",
-                time: moment().format("MMMM Do YYYY, h:mm:ss a")
+        if(e.target.message){
+            this.setState({
+                ...this.state,
+                snackbarIsOpen: !this.state.snackbarIsOpen,
+                messages: this.state.messages.concat({
+                    message: e.target.message.value,
+                    by: "me",
+                    time: moment().format("MMMM Do YYYY, h:mm:ss a")
+                })
             })
-        })
+        }
+        else if(e.target.post){
+            this.setState({
+                ...this.state,
+                snackbarIsOpen: !this.state.snackbarIsOpen,
+                posts: this.state.posts.concat({
+                    body: e.target.post.value,
+                    by: "The Covert Cow",
+                    time: moment().format("MMMM Do YYYY, h:mm:ss a"),
+                    replyCount:0
+                })
+            })
+        }
         $('#chatRoom').stop().animate({
             scrollTop: $('#chatRoom')[0].scrollHeight
-            }, 800);
+        }, 800);
     }
-    dialogHandler(type) {
-        this.setState({
-            ...this.state,
-            isDialogOpen: type
-        })
+    dialogHandler(type, event) {
+        try {
+            var index = event.nativeEvent.target.selectedIndex;
+            this.setState({
+                ...this.state,
+                isDialogOpen: type,
+                selectedOption: event.nativeEvent.target[index].text
+            })
+        } catch (error) {
+            console.log(error);
+            this.setState({
+                ...this.state,
+                isDialogOpen: type,
+                selectedOption: undefined
+            })
+        }
     }
     checkAll() {
         this.setState({
@@ -361,7 +410,7 @@ export default class Dashboard extends Component {
             <div>
                 <Grid>
                     <GridCell span="8">
-                        <CustomCard id="chatRoom" theme="" messages={this.state.messages} heading="Feed" height="60vh + 12px" />
+                        <CustomCard id="chatRoom" theme="" messages={this.state.messages} heading="Feed" height="60vh + 12px"><FeedSub height="60vh + 12px" messages={this.state.messages} posts={this.state.posts}/></CustomCard>
                         <GridInner
                             style={{
                             marginTop: "4vh"
@@ -371,7 +420,7 @@ export default class Dashboard extends Component {
                                     handler={this.menuHandler}
                                     widgetHandler={this.widgetHandler}
                                     menu={this.state.openMenu}
-                                    menuItems={["Message", "Note", "Expense"]}/>
+                                    menuItems={["Message", "Post", "Expense"]}/>
                             </GridCell>
                             <GridCell span='10'><Widgets
                                 dialogHandler={this.dialogHandler}
@@ -381,8 +430,8 @@ export default class Dashboard extends Component {
                     </GridCell>
                     <GridCell span="4">
                         <GridInner>
-                            <GridCell span="12"><CustomCard theme="green-light-2" heading="On Duty" messages={[]} height="35.5vh"/></GridCell>
-                            <GridCell span="12"><CustomCard theme='blue-light' heading="Food Schedule" messages={[]} height="35.5vh"><ScheduleSub params={this.state.schedule}/></CustomCard></GridCell>
+                            <GridCell span="12"><CustomCard isOverflowAllowed={true} theme="green-light-2" heading="On Duty" height="35.5vh"><ScheduleSub params={this.state.duty}/></CustomCard></GridCell>
+                            <GridCell span="12"><CustomCard isOverflowAllowed={true} theme='blue-light' heading="Food Schedule" height="35.5vh"><ScheduleSub params={this.state.schedule}/></CustomCard></GridCell>
                         </GridInner>
                     </GridCell>
                 </Grid>
@@ -392,7 +441,7 @@ export default class Dashboard extends Component {
                     message="Message Sent"
                     actionText="Dismiss"
                     actionHandler={() => {}}/>
-                <Modal body={<Modalbody addItem={this.addItem} items={this.state.expenseItems} checkAll={this.checkAll} isAllChecked={this.state.checkAll} members={["SomeDash",'Me','You',"Someone","Nobody","Tata","Bye Bye"]} />} isDialogOpen={this.state.isDialogOpen} openDialog={this.dialogHandler}/>
+                <Modal body={<Modalbody option={this.state.selectedOption} addItem={this.addItem} items={this.state.expenseItems} members={["SomeDash",'Me','You',"Someone","Nobody","Tata","Bye Bye"]} />} isDialogOpen={this.state.isDialogOpen} openDialog={this.dialogHandler}/>
             </div>
         )
     }

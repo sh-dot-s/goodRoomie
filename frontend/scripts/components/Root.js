@@ -66,7 +66,7 @@ const CustomToolBar = props => (
     <ToolbarRow>
       <ToolbarSection alignStart>
         <IconButton use="menu" onClick={props.drawerHandler}/>
-        <ToolbarTitle>Good Roomie</ToolbarTitle>
+        <ToolbarTitle><div  style={{display:"inline-flex"}}>Good <div style={{color:"red"}}>Roomie</div></div></ToolbarTitle>
       </ToolbarSection>
     </ToolbarRow>
   </Toolbar>

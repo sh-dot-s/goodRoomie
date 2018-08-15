@@ -25,6 +25,9 @@
 body {
     margin: 0;
     height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #root {
@@ -33,6 +36,10 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+.mdc-text-field--textarea .mdc-floating-label{
+    background-color: transparent;
 }
 
 .mdc-chip.mdc-chip--selected, .mdc-chip.mdc-chip--selected:hover{
@@ -55,7 +62,7 @@ div.special {
     .mdc-layout-grid {
         padding: 10px;
     }
-    .mdc-typography--headline5{
+    .mdc-typography--headline5, .mdc-typography--headline6{
         font-family: 'Pacifico', sans-serif !important;
     }
     .right-bubble{
@@ -69,7 +76,7 @@ div.special {
             display: block;
             right: 20px;
             word-break: break-all;
-            color: coral;
+            color: #FFEB3B;
           ::before {
             content: '';
             position: absolute;
@@ -102,7 +109,7 @@ div.special {
             max-width: 45%;
             display: block;
             word-break: break-all;
-            color: chartreuse;
+            color: #5C6BC0;
           
           ::before {
             content: '';
@@ -173,12 +180,28 @@ a {
 }
 
 .mdc-snackbar {
-    border-top: 3px solid #F4511E;
+    border-top: 3px solid chartreuse;
     .mdc-button:not(:disabled) {
-        color: darkorange
+        color: rgb(17, 185, 73)
     }
 }
 
 .bottom-align {
     align-self: flex-end;
+}
+
+.post {
+    background-color: #00000000;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 100%;
+    .post_body{
+        padding: 10px;
+        font-family: "Titillium Web"
+    }
+    small{
+        font-size: small;
+        float: right;
+    }
 }
