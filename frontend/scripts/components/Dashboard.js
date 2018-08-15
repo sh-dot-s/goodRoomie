@@ -25,11 +25,15 @@ import {
 import uuid from 'uuid';
 import moment from 'moment';
 import { Switch } from 'rmwc/Switch';
+import ScheduleSub from  './_Schedule';
 
 const CustomCard = (props) => (
     <div
         style={{
-        height: `calc(${props.height})`
+        height: `calc(${props.height})`,
+        background: props.theme? `url('/assets/images/png/${props.theme}.png')`: 'none',
+        color: props.theme? props.theme.includes("dark") ? 'white' : 'black' : 'black',
+        backgroundSize: props.theme? "cover": "none"
     }}
         className="special">
         <Typography style={{paddingBottom:"5px"}} use="headline5">{props.heading}</Typography>
@@ -40,7 +44,8 @@ const CustomCard = (props) => (
             height: `calc(${props.height} - 30px)`
         }}>
             {   
-                props.messages.map((message, key) => {
+                props.children ? (props.children) : (
+                    props.messages.map((message, key) => {
                         var name = "";
                         message.by == "me" ? name = "left-bubble" : name = "right-bubble";
                         return(
@@ -56,6 +61,7 @@ const CustomCard = (props) => (
                         )
                     
                 })
+                )
             }
         </div>
     </div>
@@ -280,7 +286,12 @@ export default class Dashboard extends Component {
             isDialogOpen: false,
             expenseItems: [],
             checkAll: false,
-            messages: []
+            messages: [],
+            schedule: [
+                ["Breakfast", "Dosa, Tomato Chutney, Aloo Fry, Pudina Chutney"],
+                ["Lunch", "Veg Biryani,Kurma"],
+                ["Dinner", "Chapathi, Gobi Curry"]
+            ]
         }
         this.menuHandler = this
             .menuHandler
@@ -350,7 +361,7 @@ export default class Dashboard extends Component {
             <div>
                 <Grid>
                     <GridCell span="8">
-                        <CustomCard id="chatRoom" messages={this.state.messages} heading="Feed" height="60vh + 12px" />
+                        <CustomCard id="chatRoom" theme="" messages={this.state.messages} heading="Feed" height="60vh + 12px" />
                         <GridInner
                             style={{
                             marginTop: "4vh"
@@ -370,8 +381,8 @@ export default class Dashboard extends Component {
                     </GridCell>
                     <GridCell span="4">
                         <GridInner>
-                            <GridCell span="12"><CustomCard heading="On Duty" messages={[]} height="35.5vh"/></GridCell>
-                            <GridCell span="12"><CustomCard heading="Food Schedule" messages={[]} height="35.5vh"/></GridCell>
+                            <GridCell span="12"><CustomCard theme="green-light-2" heading="On Duty" messages={[]} height="35.5vh"/></GridCell>
+                            <GridCell span="12"><CustomCard theme='blue-light' heading="Food Schedule" messages={[]} height="35.5vh"><ScheduleSub params={this.state.schedule}/></CustomCard></GridCell>
                         </GridInner>
                     </GridCell>
                 </Grid>
