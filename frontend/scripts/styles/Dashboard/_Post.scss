@@ -1,0 +1,15 @@
+.post {
+    background-color: #00000000;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 100%;
+    .post_body{
+        padding: 10px;
+        font-family: "Titillium Web"
+    }
+    small{
+        font-size: small;
+        float: right;
+    }
+}

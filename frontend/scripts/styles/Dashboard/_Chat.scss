@@ -1,0 +1,80 @@
+div.special {
+    padding: 5px;
+    padding-left: 8px !important;
+    background: rgba(255, 255, 255, 0);
+    color: #212124;
+    border-radius: 8px;
+    .mdc-layout-grid {
+        padding: 10px;
+    }
+    .mdc-typography--headline5, .mdc-typography--headline6{
+        font-family: 'Pacifico', sans-serif !important;
+    }
+    .right-bubble{
+            position: relative;
+            background: rgb(0, 0, 0);
+            text-align: right;
+            padding: 5px 15px;
+            border-radius: 6px;
+            float: right;
+            max-width: 45%;
+            display: block;
+            right: 20px;
+            word-break: break-all;
+            color: #FFEB3B;
+          ::before {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            right: -10px;
+            top:0px;
+            border: 10px solid transparent;
+            border-top: 10px solid rgb(0, 0, 0);
+          }
+          
+          ::after {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            right: -8px;
+            top:0px;
+            border: 10px solid transparent;
+            border-top: 10px solid rgb(0, 0, 0);
+            clear: both;
+          }
+    }
+    .left-bubble{
+            position: relative;
+            background: rgb(0, 0, 0);
+            text-align: left;
+            padding: 10px 15px;
+            border-radius: 6px;
+            float: left;
+            left: 10px;
+            max-width: 45%;
+            display: block;
+            word-break: break-all;
+            color: #5C6BC0;
+          
+          ::before {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            left: -10px;
+            top:0px;
+            border: 10px solid transparent;
+            border-top: 10px solid rgb(0, 0, 0);
+          }
+          
+          ::after {
+            content: '';
+            position: absolute;
+            visibility: visible;
+            left: -8px;
+            top:0px;
+            border: 10px solid transparent;
+            border-top: 10px solid rgb(0, 0, 0);
+            clear: both;
+          }
+    }
+}

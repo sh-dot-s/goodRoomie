@@ -3,8 +3,8 @@ import { TabBar, Tab, TabIcon, TabIconText, TabBarScroller } from 'rmwc/Tabs';
 import { ListDivider } from 'rmwc/List';
 import { Button, ButtonIcon, Chip, ChipText } from 'rmwc';
 import { Typography } from 'rmwc/Typography';
-import { Grid, GridCell } from 'rmwc/Grid';
-import Modal from './common/Modal';
+import { Grid, GridCell, GridInner } from 'rmwc/Grid';
+import { Modal } from './../common';
 
 export default class _Feed extends Component {
     constructor(props) {
@@ -35,7 +35,6 @@ export default class _Feed extends Component {
                 <Tab>Posts</Tab>
                 <Tab>Chat</Tab>
             </TabBar>
-            {console.log(this.props.height)}
             {
                 (
                     <div id="chatRoom" className="overflow" style={{height: `calc(${this.props.height} - 60px)`}}>

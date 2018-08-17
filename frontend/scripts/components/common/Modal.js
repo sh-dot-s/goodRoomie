@@ -14,7 +14,7 @@ import {
 
 import {Button} from 'rmwc/Button';
 
-export default class Modal extends Component {
+export class Modal extends Component {
     constructor(props) {
       super(props)
     }
