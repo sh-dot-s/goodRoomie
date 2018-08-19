@@ -18,11 +18,11 @@ export default (props) => {
                         e.target.message.value="";
                     }}
                 >
-                    <GridInner className="bottom-align">
+                    <GridInner>
                         <GridCell span="9">
                             <TextField required name="message" fullwidth rows="1" inputRef="text" label="Message goes here..."/>
                         </GridCell>
-                        <GridCell className="bottom-align" span="1">
+                        <GridCell span="1">
                             <Button type="submit">Send&nbsp;<ButtonIcon use="send"/></Button>
                         </GridCell>
                     </GridInner>
@@ -51,11 +51,11 @@ export default (props) => {
                         e.target.post.value="";
                     }}
                 >
-                    <GridInner className="bottom-align">
+                    <GridInner>
                         <GridCell span="9">
                             <TextField required name="post" textarea fullwidth rows="2" inputRef="text" label="Type Something here..."/>
                         </GridCell>
-                        <GridCell className="bottom-align" span="1">
+                        <GridCell span="1">
                             <Button type="submit">Post&nbsp;<ButtonIcon use="play_circle_filled"/></Button>
                         </GridCell>
                     </GridInner>
