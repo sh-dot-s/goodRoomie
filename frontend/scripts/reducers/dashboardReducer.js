@@ -5,14 +5,14 @@ const defaltDashboardState = {
 export const dashboardReducer = (state, action) => {
     switch (action.type) {
         case "GET_MESSAGES":
-            return {...this.state, messages:action.messages}
+            return {...state, messages:action.messages}
         case "GET_SCHEDULE":
-            return {...this.state, messages:action.messages}
+            return {...state, schedule:action.schedule}
         case "GET_DUTY":
-            return {...this.state, messages:action.messages}
+            return {...state, duty:action.duty}
         case "GET_POSTS":
-            return {...this.state, messages:action.messages}
+            return {...state, posts:action.posts}
         default:
-            break;
+            return state
     }
 }

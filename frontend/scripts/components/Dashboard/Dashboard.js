@@ -36,8 +36,13 @@ export default class Dashboard extends Component {
             ],
             posts: [
                 {
+                    id: uuid(),
                     by: "Sri Harsha",
                     replyCount: 0,
+                    replies: [{
+                        id: uuid(),
+                        message: "Sample Reply"
+                    }],
                     body: "This is a sample post body",
                     time: moment().format("MMMM Do YYYY, h:mm:ss a"),
                 }

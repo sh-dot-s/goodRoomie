@@ -50,7 +50,7 @@ export default class ExpenseBody extends Component {
             items: {
                 name: '',
                 price: '',
-                members: new Array()
+                members: []
             }
         })
         

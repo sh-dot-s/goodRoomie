@@ -66,7 +66,15 @@ const CustomToolBar = props => (
     <ToolbarRow>
       <ToolbarSection alignStart>
         <IconButton use="menu" onClick={props.drawerHandler}/>
-        <ToolbarTitle><div  style={{display:"inline-flex"}}>Good <div style={{color:"red"}}>Roomie</div></div></ToolbarTitle>
+        <ToolbarTitle>
+          <div style={{
+            display: "inline-flex"
+          }}>Good
+            <div style={{
+              color: "red"
+            }}>Roomie</div>
+          </div>
+        </ToolbarTitle>
       </ToolbarSection>
     </ToolbarRow>
   </Toolbar>
@@ -91,18 +99,24 @@ export default class Root extends Component {
   render() {
     return (
       <div>
-        <CustomToolBar drawerHandler={this.drawerHandler}></CustomToolBar>
-        <Drawer
-          temporary
-          open={this.state.drawerOpen}
-          onClose={() => this.setState({drawerOpen: false})}>
-          <DrawerHeader>
-            Menu
-          </DrawerHeader>
-          <DrawerContent>
-            <CustomList handler={this.drawerHandler} listItems={this.state.listItems}/>
-          </DrawerContent>
-        </Drawer>
+        {this.props.authenticated
+          ? (
+            <div>
+              <CustomToolBar drawerHandler={this.drawerHandler}></CustomToolBar>
+              <Drawer
+                temporary
+                open={this.state.drawerOpen}
+                onClose={() => this.setState({drawerOpen: false})}>
+                <DrawerHeader>
+                  Menu
+                </DrawerHeader>
+                <DrawerContent>
+                  <CustomList handler={this.drawerHandler} listItems={this.state.listItems}/>
+                </DrawerContent>
+              </Drawer>
+            </div>
+          )
+          : null}
       </div>
     )
   }
